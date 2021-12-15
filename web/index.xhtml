@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>ADMINCP</title>
+    </h:head>
+    <h:body>
+
+        <h1>Middagsmeny</h1>
+
+        <h:dataTable value="#{dbreader.readerDB()}" var="u" border="1">
+            <h:column>
+                <f:facet name="header">
+                    Maträtt
+                </f:facet>
+                    #{u.foodname}
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">
+                    Pris
+                </f:facet>
+                    #{u.price}
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">
+                    Huvud/För rätt (resp. 1, 2)
+                </f:facet>
+                    #{u.foodtype}
+            </h:column>
+            
+            <h:column>
+                <f:facet name="header">
+                    Tillagningstid
+                </f:facet>
+                    #{u.time}
+            </h:column>
+        </h:dataTable>
+        
+        <h:form  onsubmit="this.action='#{dBsender.writerDB(dBreader.readerDB())}';">
+            
+            
+              
+                <h1>
+                  Evenemang
+                </h1>
+              
+              
+                <fieldset>
+                      Evenemang title
+                      <h:inputText id="eventTitle" 
+                                  value="#{dBsender.name}"
+                                  required="false"
+                                  
+                                  maxlength="50">
+                     </h:inputText>
+                </fieldset>
+             
+              
+                <fieldset>
+                    Event detaljer
+                    <h:inputTextarea 
+                                    id="eventDetails" 
+                                    value="#{dBsender.email}"
+                                    required="false" >
+                    </h:inputTextarea>
+               </fieldset>
+             
+            
+            </h:form>
+        
+    </h:body>
+</html>
