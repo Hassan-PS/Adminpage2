@@ -4,31 +4,33 @@
  */
 package se.miun.javaCode;
 
-import java.util.HashSet;
+import static java.lang.System.out;
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.inject.Named;
 import javax.enterprise.context.Dependent;
+import javax.faces.annotation.FacesConfig;
+import static javax.faces.annotation.FacesConfig.Version.JSF_2_3;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import javax.transaction.HeuristicMixedException;
-import javax.transaction.HeuristicRollbackException;
-import javax.transaction.NotSupportedException;
-import javax.transaction.RollbackException;
-import javax.transaction.SystemException;
-import se.miun.entities.Menuitemwebb;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.transaction.Transactional;
 import se.miun.entities.Menuitem;
-import se.miun.entities.Cookingtime;
-
+import se.miun.entities.Menuitemwebb;
 
 /**
  *
  * @author hassa
  */
+
+@FacesConfig(
+        // Activates CDI build-in beans
+        version = JSF_2_3
+)
 @Named(value = "dbreader")
 @Dependent
 public class DBreader {
@@ -56,35 +58,25 @@ public class DBreader {
         return resultList;
     }
     
-
-    public void DBremove(int id) throws NotSupportedException, SystemException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
-        utx.begin();
-        Menuitem item = em.getReference(Menuitem.class, id);
-        em.remove(item);
-        utx.commit();
-        utx.begin();
-        Cookingtime time = em.getReference(Cookingtime.class, id);
-        em.remove(time);
-        utx.commit();
+    public void DBremove(int pos){
         
+        try {
+            //Menuitemwebb toremove = em.find(Menuitemwebb.class, pos);
+            utx.begin();
+            em.remove();
+            utx.commit();
+        } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", e);
+            throw new RuntimeException(e);
+        }
+//        Menuitemwebb toremove = em.find(Menuitemwebb.class, pos);
+//        em.getTransaction().begin();
+//        int howmanydeleted = em.createQuery("DELETE FROM MENUITEM").executeUpdate();
+//        out.println("hej  " + howmanydeleted);
+//        //em.remove(toremove);
+//        em.getTransaction().commit();
     }
 
-    public void DBadd(String name, Integer foodtype, String cookingtime, int price, Integer id){
-        Menuitem item = new Menuitem();
-        item.setFoodname(name);
-        item.setId(id);
-        item.setFoodtype(foodtype);
-        item.setPrice(price);
-        Cookingtime time = new Cookingtime();
-        time.setId(id);
-        int hej = 5;
-        
-        int id2 = id.intValue();
-        time.setMenuitemid(id);
-        time.setTime(cookingtime);
-        persist(item);
-        persist(time);
-    }
 
     public void persist(Object object) {
         try {
