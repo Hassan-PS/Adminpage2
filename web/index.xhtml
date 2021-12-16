@@ -41,9 +41,15 @@
             <h:column>
                 <h:button onclick= "#{dbreader.DBremove(u.id)}" value="REMOVE ITEM 1" />
             </h:column>
-           
-            
       </h:dataTable>
+        
+        <h:inputText id="name" required="true" maxlength="50"></h:inputText>
+        <h:inputText id="foodtype" required="true" maxlength="50"></h:inputText>
+        <h:inputText id="cookingtime" required="true" maxlength="50"></h:inputText>        
+        <h:inputText id="price" required="true" maxlength="50"></h:inputText>
+        <h:inputText id="id" required="true" maxlength="50"></h:inputText>
+        <h:button onclick="#{dbreader.DBadd(name, foodtype, cookingtime, price, id)}" value="ADD ITEM"/>
+        
        
         
         <h:form  onsubmit="this.action='#{dBsender.writerDB(dBreader.readerDB())}';">
