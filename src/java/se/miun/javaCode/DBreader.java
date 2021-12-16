@@ -49,11 +49,12 @@ public class DBreader {
         return resultList;
     }
     
-    @WebServlet("/DBremove.do")
-    public DBremove extends HttpServlet {
-        DBreader toremove = em.find(DBreader.class, getId());
-        
 
+    public void DBremove(){
+        Menuitemwebb toremove = em.find(Menuitemwebb.class, 1);
+        em.getTransaction().begin();
+        em.remove(toremove);
+        em.getTransaction().commit();
     }
 
 
