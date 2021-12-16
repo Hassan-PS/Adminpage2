@@ -39,7 +39,7 @@ public class Cookingtime implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "MENUITEMID")
-    private int menuitemid;
+    private Integer menuitemid;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
@@ -71,7 +71,7 @@ public class Cookingtime implements Serializable {
         return menuitemid;
     }
 
-    public void setMenuitemid(int menuitemid) {
+    public void setMenuitemid(Integer menuitemid) {
         this.menuitemid = menuitemid;
     }
 

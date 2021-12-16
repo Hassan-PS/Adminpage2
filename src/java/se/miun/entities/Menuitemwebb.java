@@ -42,7 +42,7 @@ public class Menuitemwebb implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "ID")
-    private int id;
+    private Integer id;
     @Basic(optional = false)
     @NotNull
     @Column(name = "PRICE")
@@ -66,7 +66,7 @@ public class Menuitemwebb implements Serializable {
         this.foodname = foodname;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
