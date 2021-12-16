@@ -5,12 +5,14 @@
 package se.miun.javaCode;
 
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.inject.Named;
 import javax.enterprise.context.Dependent;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.annotation.FacesConfig;
 import static javax.faces.annotation.FacesConfig.Version.JSF_2_3;
 import javax.persistence.EntityManager;
@@ -35,13 +37,15 @@ import se.miun.entities.Cookingtime;
         version = JSF_2_3
 )
 @Named(value = "dbreader")
-@Dependent
-public class DBreader {
-    private String foodname;
-    private int id;
-    private int price;
-    private int foodtype;
-    private int time;
+@SessionScoped
+public class DBreader implements Serializable {
+    
+    private String THE_ID = "0";
+    private String foodname = "fisk";
+    private String price = "20";
+    private String foodtype = "1";
+    private String time = "20";
+    
     private List <Menuitemwebb> resultList;
 
     @PersistenceContext(unitName = "AdminPage2PU")
@@ -64,26 +68,31 @@ public class DBreader {
     public void DBremove(int id) throws NotSupportedException, SystemException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
         utx.begin();
         Menuitem item = em.getReference(Menuitem.class, id);
-        em.remove(item);
-        utx.commit();
-        utx.begin();
         Cookingtime time = em.getReference(Cookingtime.class, id);
+        em.remove(item);
         em.remove(time);
         utx.commit();
     }
     
-    public void DBadd(String name, Integer foodtype, String cookingtime, int price, Integer id){
-        Menuitem item = new Menuitem();
-        item.setFoodname(name);
-        item.setId(id);
-        item.setFoodtype(foodtype);
-        item.setPrice(price);
-        Cookingtime time = new Cookingtime();
-        time.setId(id);
-        time.setMenuitemid(id.intValue());
-        time.setTime(cookingtime);
+    public void DBadd(){
+        if(foodname == "" || foodtype == "" || time == "" || price == "" || THE_ID == "") {
+            return;
+        }
+        Menuitem item = new Menuitem(Integer.parseInt(THE_ID));
+        item.setFoodname(foodname);
+        item.setFoodtype(Integer.parseInt(foodtype));
+        item.setPrice(Integer.parseInt(price));
+        Cookingtime itemTime = new Cookingtime();
+        itemTime.setId(Integer.parseInt(THE_ID));
+        itemTime.setMenuitemid(Integer.parseInt(THE_ID));
+        itemTime.setTime(time);
         persist(item);
-        persist(time);
+        persist(itemTime);
+//        setFoodname("");
+//        setFoodtype("");
+//        setTime("");
+//        setPrice("");
+        setTHE_ID("");
     }
 
     public void persist(Object object) {
@@ -91,7 +100,7 @@ public class DBreader {
             utx.begin();
             em.persist(object);
             utx.commit();
-        } catch (Exception e) {
+        } catch (IllegalStateException | SecurityException | HeuristicMixedException | HeuristicRollbackException | NotSupportedException | RollbackException | SystemException e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", e);
             throw new RuntimeException(e);
         }
@@ -112,59 +121,58 @@ public class DBreader {
     }
 
     /**
-     * @return the id
+     * @return the THE_ID
      */
-    public int getId() {
-        return id;
+    public String getTHE_ID() {
+        return THE_ID;
     }
 
     /**
-     * @param id the id to set
+     * @param THE_ID the THE_ID to set
      */
-    public void setId(int id) {
-        this.id = id;
+    public void setTHE_ID(String THE_ID) {
+        this.THE_ID = THE_ID;
     }
 
     /**
      * @return the price
      */
-    public int getPrice() {
+    public String getPrice() {
         return price;
     }
 
     /**
      * @param price the price to set
      */
-    public void setPrice(int price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 
     /**
      * @return the foodtype
      */
-    public int getFoodtype() {
+    public String getFoodtype() {
         return foodtype;
     }
 
     /**
      * @param foodtype the foodtype to set
      */
-    public void setFoodtype(int foodtype) {
+    public void setFoodtype(String foodtype) {
         this.foodtype = foodtype;
     }
 
     /**
      * @return the time
      */
-    public int getTime() {
+    public String getTime() {
         return time;
     }
 
     /**
      * @param time the time to set
      */
-    public void setTime(int time) {
+    public void setTime(String time) {
         this.time = time;
     }
-    
 }

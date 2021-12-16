@@ -7,6 +7,11 @@
         <title>ADMINCP</title>
     </h:head>
     <h:body>
+    <script>
+        if ( window.history.replaceState ) {
+            window.history.replaceState( null, null, window.location.href );
+        }
+    </script>
 
         <h1>Middagsmeny</h1>
 
@@ -39,32 +44,25 @@
                     #{u.time}
             </h:column>
             <h:column>
-                <h:button onclick= "#{dbreader.DBremove(u.id)}" value="REMOVE ITEM 1" />
+                <h:form id="form">
+                    <h:commandButton id="button" value="REMOVE ITEM" action="#{dbreader.DBremove(u.id)}" />
+                </h:form>
             </h:column>
       </h:dataTable>
-        
-        <h:inputText id="name" required="true" maxlength="50"></h:inputText>
-        <h:inputText id="foodtype" required="true" maxlength="50"></h:inputText>
-        <h:inputText id="cookingtime" required="true" maxlength="50"></h:inputText>        
-        <h:inputText id="price" required="true" maxlength="50"></h:inputText>
-        <h:inputText id="id" required="true" maxlength="50"></h:inputText>
-        <h:button onclick="#{dbreader.DBadd(name, foodtype, cookingtime, price, id)}" value="ADD ITEM"/>
-        
+       
        
         
-        <h:form  onsubmit="this.action='#{dBsender.writerDB(dBreader.readerDB())}';">
+        <h:form>
             
-            
-              
                 <h1>
                   Evenemang
                 </h1>
               
               
                 <fieldset>
-                      Evenemang title
+                      foodname
                       <h:inputText id="eventTitle" 
-                                  value="#{dBsender.name}"
+                                   value="#{dbreader.foodname}"
                                   required="false"
                                   
                                   maxlength="50">
@@ -73,14 +71,43 @@
              
               
                 <fieldset>
-                    Event detaljer
-                    <h:inputTextarea 
-                                    id="eventDetails" 
-                                    value="#{dBsender.email}"
+                    price
+                    <h:inputText
+                                    id="eventDetails2" 
+                                    value="#{dbreader.price}"
+                                    required="false" 
+                                    maxlength="50">
+                    </h:inputText>
+                </fieldset>
+            
+           
+                <fieldset>
+                    foodtype
+                    <h:inputText
+                                    id="eventDetails4" 
+                                    value="#{dbreader.foodtype}"
                                     required="false" >
-                    </h:inputTextarea>
+                    </h:inputText>
+                </fieldset>
+                <fieldset>
+                    time
+                    <h:inputText
+                                    id="eventDetails5" 
+                                    value="#{dbreader.time}"
+                                    required="false" >
+                    </h:inputText>
+                </fieldset>
+            
+            <fieldset>
+                    id
+                    <h:inputText
+                                    id="eventDetails1" 
+                                    value="#{dbreader.THE_ID}"
+                                    required="false" >
+                    </h:inputText>
                </fieldset>
-             
+            
+            <h:commandButton id="button" value="POST button" action="#{dbreader.DBadd()}" />
             
             </h:form>
         
