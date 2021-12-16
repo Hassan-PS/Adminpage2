@@ -4,17 +4,21 @@
  */
 package se.miun.javaCode;
 
+import static java.lang.System.out;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.inject.Named;
 import javax.enterprise.context.Dependent;
+import javax.faces.annotation.FacesConfig;
+import static javax.faces.annotation.FacesConfig.Version.JSF_2_3;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
+import javax.transaction.Transactional;
 import se.miun.entities.Menuitem;
 import se.miun.entities.Menuitemwebb;
 
@@ -22,6 +26,11 @@ import se.miun.entities.Menuitemwebb;
  *
  * @author hassa
  */
+
+@FacesConfig(
+        // Activates CDI build-in beans
+        version = JSF_2_3
+)
 @Named(value = "dbreader")
 @Dependent
 public class DBreader {
@@ -49,12 +58,23 @@ public class DBreader {
         return resultList;
     }
     
-
-    public void DBremove(){
-        Menuitemwebb toremove = em.find(Menuitemwebb.class, 1);
-        em.getTransaction().begin();
-        em.remove(toremove);
-        em.getTransaction().commit();
+    public void DBremove(int pos){
+        
+        try {
+            //Menuitemwebb toremove = em.find(Menuitemwebb.class, pos);
+            utx.begin();
+            em.remove();
+            utx.commit();
+        } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", e);
+            throw new RuntimeException(e);
+        }
+//        Menuitemwebb toremove = em.find(Menuitemwebb.class, pos);
+//        em.getTransaction().begin();
+//        int howmanydeleted = em.createQuery("DELETE FROM MENUITEM").executeUpdate();
+//        out.println("hej  " + howmanydeleted);
+//        //em.remove(toremove);
+//        em.getTransaction().commit();
     }
 
 

@@ -39,9 +39,12 @@
                     #{u.time}
             </h:column>
             <h:column>
-                <h:commandButton action ="#{dbreader.DBremove()}" value="REMOVE ITEM"/>
+                <h:button onclick= "#{dbreader.DBremove(u.id)}" value="REMOVE ITEM 1" />
             </h:column>
-        </h:dataTable>
+           
+            
+      </h:dataTable>
+       
         
         <h:form  onsubmit="this.action='#{dBsender.writerDB(dBreader.readerDB())}';">
             
