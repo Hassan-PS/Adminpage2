@@ -6,9 +6,10 @@
         <property name="portNumber" value="1527"/>
         <property name="databaseName" value="antonDB"/>
         <property name="User" value="anton"/>
-        <property name="Password" value="anton"/>
+        <property name="Password" value="123"/>
         <property name="URL" value="jdbc:derby://localhost:1527/antonDB"/>
         <property name="driverClass" value="org.apache.derby.jdbc.ClientDriver"/>
     </jdbc-connection-pool>
     <jdbc-resource enabled="true" jndi-name="java:app/anton" object-type="user" pool-name="derby_net_antonDB_antonPool"/>
+
 </resources>

@@ -13,6 +13,8 @@ import javax.enterprise.context.Dependent;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
 import se.miun.entities.Menuitem;
 import se.miun.entities.Menuitemwebb;
 
@@ -46,6 +48,14 @@ public class DBreader {
         resultList = MyQuery.getResultList();
         return resultList;
     }
+    
+    @WebServlet("/DBremove.do")
+    public DBremove extends HttpServlet {
+        DBreader toremove = em.find(DBreader.class, getId());
+        
+
+    }
+
 
     public void persist(Object object) {
         try {

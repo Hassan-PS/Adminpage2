@@ -38,6 +38,9 @@
                 </f:facet>
                     #{u.time}
             </h:column>
+            <h:column>
+                <a href="DBremove.do">Remove Item</a>
+            </h:column>
         </h:dataTable>
         
         <h:form  onsubmit="this.action='#{dBsender.writerDB(dBreader.readerDB())}';">
