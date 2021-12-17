@@ -3,7 +3,6 @@
   <persistence-unit name="AdminPage2PU" transaction-type="JTA">
     <jta-data-source>java:app/anton</jta-data-source>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
-    <validation-mode>CALLBACK</validation-mode>
     <properties/>
   </persistence-unit>
 </persistence>

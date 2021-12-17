@@ -40,7 +40,7 @@ import se.miun.entities.Cookingtime;
 @SessionScoped
 public class DBreader implements Serializable {
     
-    private String THE_ID = "0";
+    private int THE_ID = 1;
     private String foodname = "fisk";
     private String price = "20";
     private String foodtype = "1";
@@ -75,16 +75,21 @@ public class DBreader implements Serializable {
     }
     
     public void DBadd(){
-        if(foodname == "" || foodtype == "" || time == "" || price == "" || THE_ID == "") {
+        if(foodname == "" || foodtype == "" || time == "" || price == "" || THE_ID == 0) {
             return;
         }
-        Menuitem item = new Menuitem(Integer.parseInt(THE_ID));
+        em.createQuery("select max(m.id) from Menuitem m where m.id = :id")
+        .setParameter("id", THE_ID)
+        .getSingleResult();
+        THE_ID = THE_ID + 1;
+        //THE_ID = em.createNamedQuery("Menuitem.highestID", Menuitem.class).getResultList().get(0).getId() + 1;
+        Menuitem item = new Menuitem(THE_ID);
         item.setFoodname(foodname);
         item.setFoodtype(Integer.parseInt(foodtype));
         item.setPrice(Integer.parseInt(price));
         Cookingtime itemTime = new Cookingtime();
-        itemTime.setId(Integer.parseInt(THE_ID));
-        itemTime.setMenuitemid(Integer.parseInt(THE_ID));
+        itemTime.setId(THE_ID);
+        itemTime.setMenuitemid(THE_ID);
         itemTime.setTime(time);
         persist(item);
         persist(itemTime);
@@ -92,7 +97,7 @@ public class DBreader implements Serializable {
 //        setFoodtype("");
 //        setTime("");
 //        setPrice("");
-        setTHE_ID("");
+//        setTHE_ID("");
     }
 
     public void persist(Object object) {
@@ -123,14 +128,14 @@ public class DBreader implements Serializable {
     /**
      * @return the THE_ID
      */
-    public String getTHE_ID() {
+    public int getTHE_ID() {
         return THE_ID;
     }
 
     /**
      * @param THE_ID the THE_ID to set
      */
-    public void setTHE_ID(String THE_ID) {
+    public void setTHE_ID(int THE_ID) {
         this.THE_ID = THE_ID;
     }
 

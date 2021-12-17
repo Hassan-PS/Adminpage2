@@ -28,6 +28,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Menuitem.findByFoodname", query = "SELECT m FROM Menuitem m WHERE m.foodname = :foodname"),
     @NamedQuery(name = "Menuitem.findById", query = "SELECT m FROM Menuitem m WHERE m.id = :id"),
     @NamedQuery(name = "Menuitem.findByPrice", query = "SELECT m FROM Menuitem m WHERE m.price = :price"),
+    //@NamedQuery(name = "Menuitem.highestID", query = "SELECT m FROM MENUITEM WHERE MENUITEM.ID = (SELECT MAX(MENUITEM.ID) FROM MENUITEM)"),
     @NamedQuery(name = "Menuitem.findByFoodtype", query = "SELECT m FROM Menuitem m WHERE m.foodtype = :foodtype")})
 public class Menuitem implements Serializable {
 
