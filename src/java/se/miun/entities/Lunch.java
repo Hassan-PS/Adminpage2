@@ -20,55 +20,54 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author hassa
+ * @author Oliver
  */
 @Entity
-@Table(name = "MENUITEM")
+@Table(name = "LUNCH")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Menuitem.findAll", query = "SELECT m FROM Menuitem m"),
-    @NamedQuery(name = "Menuitem.findByFoodname", query = "SELECT m FROM Menuitem m WHERE m.foodname = :foodname"),
-    @NamedQuery(name = "Menuitem.findById", query = "SELECT m FROM Menuitem m WHERE m.id = :id"),
-    @NamedQuery(name = "Menuitem.findByPrice", query = "SELECT m FROM Menuitem m WHERE m.price = :price"),
+    @NamedQuery(name = "Lunch.findAll", query = "SELECT m FROM Lunch m ORDER BY m.day"),
+    @NamedQuery(name = "Lunch.findByLunch_name", query = "SELECT m FROM Lunch m WHERE m.lunch_name = :lunch_name"),
+    @NamedQuery(name = "Lunch.findById", query = "SELECT m FROM Lunch m WHERE m.id = :id"),
+    @NamedQuery(name = "Lunch.findByDay", query = "SELECT m FROM Lunch m WHERE m.day = :day"),
     //@NamedQuery(name = "Menuitem.highestID", query = "SELECT m FROM MENUITEM WHERE MENUITEM.ID = (SELECT MAX(MENUITEM.ID) FROM MENUITEM)"),
-    @NamedQuery(name = "Menuitem.findByFoodtype", query = "SELECT m FROM Menuitem m WHERE m.foodtype = :foodtype")})
-public class Menuitem implements Serializable {
+    @NamedQuery(name = "Lunch.findBydescription", query = "SELECT m FROM Lunch m WHERE m.description = :description")})
+public class Lunch implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 500)
-    @Column(name = "FOODNAME")
-    private String foodname;
+    @Basic(optional = true)
+    @Size(min = 1, max = 50)
+    @Column(name = "LUNCH_NAME")
+    private String lunch_name;
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "ID")
     private Integer id;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "PRICE")
-    private int price;
-    @Column(name = "FOODTYPE")
-    private Integer foodtype;
+    @Basic(optional = true)
+    @Size(min = 1, max = 50)
+    @Column(name = "DESCRIPTION")
+    private String description;
+    @Column(name = "LUNCH_DAY")
+    private Integer day;
 
-    public Menuitem() {
+    public Lunch() {
     }
 
 //    public Menuitem(Integer id) {
 //        this.id = id;
 //    }
 
-    public Menuitem(String foodname, int price) {
-        this.foodname = foodname;
-        this.price = price;
+    public Lunch(String lunch_name, String description) {
+        this.lunch_name = lunch_name;
+        this.description = description;
     }
 
-    public String getFoodname() {
-        return foodname;
+    public String getLunch_name() {
+        return lunch_name;
     }
 
-    public void setFoodname(String foodname) {
-        this.foodname = foodname;
+    public void setLunch_name(String lunch_name) {
+        this.lunch_name = lunch_name;
     }
 
     public Integer getId() {
@@ -79,20 +78,20 @@ public class Menuitem implements Serializable {
 //        this.id = id;
 //    }
 
-    public int getPrice() {
-        return price;
+    public String getDescription() {
+        return description;
     }
 
-    public void setPrice(int price) {
-        this.price = price;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public Integer getFoodtype() {
-        return foodtype;
+    public Integer getDay() {
+        return day;
     }
 
-    public void setFoodtype(Integer foodtype) {
-        this.foodtype = foodtype;
+    public void setDay(Integer day) {
+        this.day = day;
     }
 
     @Override
@@ -105,10 +104,10 @@ public class Menuitem implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Menuitem)) {
+        if (!(object instanceof Lunch)) {
             return false;
         }
-        Menuitem other = (Menuitem) object;
+        Lunch other = (Lunch) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -117,7 +116,7 @@ public class Menuitem implements Serializable {
 
     @Override
     public String toString() {
-        return "se.miun.entities.Menuitem[ id=" + id + " ]";
+        return "se.miun.entities.Lunch[ id=" + id + " ]";
     }
     
 }

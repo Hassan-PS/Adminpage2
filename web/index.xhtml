@@ -12,7 +12,7 @@
             window.history.replaceState( null, null, window.location.href );
         }
     </script>
-
+        <a href="kundsida.xhtml">Frontend</a>
         <h1>Middagsmeny</h1>
 
         <h:dataTable value="#{dbreader.readerDB()}" var="u" border="1">
@@ -55,7 +55,7 @@
         <h:form>
             
                 <h1>
-                  NY RÄTT
+                  NY MIDDAGSRÄTT
                 </h1>
               
               
@@ -83,11 +83,10 @@
            
                 <fieldset>
                     foodtype
-                    <h:inputText
-                                    id="eventDetails4" 
-                                    value="#{dbreader.foodtype}"
-                                    required="false" >
-                    </h:inputText>
+                    <h:selectOneMenu value="#{dbreader.foodtype}" >
+                        <f:selectItem itemValue="1" itemLabel="Förrätt" />
+                        <f:selectItem itemValue="2" itemLabel="Huvudrätt" />
+                </h:selectOneMenu>
                 </fieldset>
                 <fieldset>
                     time
@@ -110,6 +109,99 @@
             <h:commandButton id="button" value="LÄGG TILL" action="#{dbreader.DBadd()}" />
             
             </h:form>
+        
+        
+        
+        
+        
+         <h1>LUNCHMENY</h1>
+
+        <h:dataTable value="#{dbreader.LunchReaderDB()}" var="z" border="1">
+            <h:column>
+                <f:facet name="header">
+                    Maträtt
+                </f:facet>
+                    #{z.lunch_name}
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">
+                    Beskrivning
+                </f:facet>
+                    #{z.description}
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">
+                    Veckodag
+                </f:facet>
+                    #{z.day}
+            </h:column>
+            
+            <h:column>
+                <h:form id="form">
+                    <h:commandButton id="button" value="REMOVE ITEM" action="#{dbreader.DBremoveLunch(z.id)}" />
+                </h:form>
+            </h:column>
+      </h:dataTable>
+       
+       
+        
+        <h:form>
+            
+                <h1>
+                  NY LUNCHRÄTT
+                </h1>
+              
+              
+                <fieldset>
+                      Namn
+                      <h:inputText id="eventTitle" 
+                                   value="#{dbreader.lunch_name}"
+                                  required="false"
+                                  
+                                  maxlength="50">
+                     </h:inputText>
+                </fieldset>
+             
+              
+                <fieldset>
+                    Beskrivning
+                    <h:inputText
+                                    id="eventDetails2" 
+                                    value="#{dbreader.description}"
+                                    required="false" 
+                                    maxlength="50">
+                    </h:inputText>
+                </fieldset>
+            
+           
+                <fieldset>
+                    Dag
+                <h:selectOneMenu value="#{dbreader.day}" >
+                    <f:selectItem itemValue="1" itemLabel="Måndag" />
+                    <f:selectItem itemValue="2" itemLabel="Tisdag" />
+                    <f:selectItem itemValue="3" itemLabel="Onsdag" />
+                    <f:selectItem itemValue="4" itemLabel="Torsdag" />
+                    <f:selectItem itemValue="5" itemLabel="Fredag" />
+                    <f:selectItem itemValue="6" itemLabel="Lördag" />
+                    <f:selectItem itemValue="7" itemLabel="Söndag" />
+                </h:selectOneMenu>
+                </fieldset>
+<!--            <fieldset>
+                    id
+                    <h:inputText
+                                    id="eventDetails1" 
+                                    value=""
+                                    required="false" >
+                    </h:inputText>
+               </fieldset>-->
+            
+            <h:commandButton id="button" value="LÄGG TILL" action="#{dbreader.DBaddLunch()}" />
+            
+            </h:form>
+         
+         
         
     </h:body>
 </html>

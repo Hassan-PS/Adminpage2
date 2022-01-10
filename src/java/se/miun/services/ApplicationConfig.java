@@ -31,6 +31,7 @@ public class ApplicationConfig extends Application {
         resources.add(se.miun.services.BookingFacadeREST.class);
         resources.add(se.miun.services.CookingtimeFacadeREST.class);
         resources.add(se.miun.services.KitchenorderFacadeREST.class);
+        resources.add(se.miun.services.LunchFacadeREST.class);
         resources.add(se.miun.services.MenuitemFacadeREST.class);
         resources.add(se.miun.services.MenuitemwebbFacadeREST.class);
         resources.add(se.miun.services.ResturangorderFacadeREST.class);

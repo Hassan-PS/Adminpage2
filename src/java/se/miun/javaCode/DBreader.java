@@ -11,7 +11,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.inject.Named;
-import javax.enterprise.context.Dependent;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.annotation.FacesConfig;
 import static javax.faces.annotation.FacesConfig.Version.JSF_2_3;
@@ -26,6 +25,7 @@ import javax.transaction.SystemException;
 import se.miun.entities.Menuitem;
 import se.miun.entities.Menuitemwebb;
 import se.miun.entities.Cookingtime;
+import se.miun.entities.Lunch;
 
 /**
  *
@@ -40,13 +40,20 @@ import se.miun.entities.Cookingtime;
 @SessionScoped
 public class DBreader implements Serializable {
     
-    private int THE_ID = 1;
+    //VARIABLER FÖR MIDDAG
     private String foodname = "fisk";
     private String price = "20";
     private String foodtype = "1";
     private String time = "20";
     
+    //VARIABLER FÖR LUNCH
+    private String lunch_name = "fisk";
+    private String description = "TEST";
+    private String day = "1";
+    private String day_modified;
+    
     private List <Menuitemwebb> resultList;
+    private List <Lunch> resultLunch;
 
     @PersistenceContext(unitName = "AdminPage2PU")
     private EntityManager em;
@@ -64,40 +71,82 @@ public class DBreader implements Serializable {
         resultList = MyQuery.getResultList();
         return resultList;
     }
-    
-    public void DBremove(int id) throws NotSupportedException, SystemException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
-        utx.begin();
-        Menuitem item = em.getReference(Menuitem.class, id);
-        Cookingtime time = em.getReference(Cookingtime.class, id);
-        em.remove(item);
-        em.remove(time);
-        utx.commit();
+
+    public List <Lunch> LunchReaderDB(){
+        TypedQuery<Lunch> MyQuery = em.createNamedQuery("Lunch.findAll", Lunch.class);
+        resultLunch = MyQuery.getResultList();
+        return resultLunch;
     }
     
-    public void DBadd(){
-        if(foodname == "" || foodtype == "" || time == "" || price == "" || THE_ID == 0) {
+    public void DBremove(int id) throws NotSupportedException, SystemException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
+        
+        //Ta bort Cookingtime - måste göras då denna har en foregin key
+        utx.begin();
+        Cookingtime c_time = em.find(Cookingtime.class, id);
+        em.remove(c_time);
+        em.flush();
+        utx.commit();
+
+        //Ta bort Menuitem
+        utx.begin();
+        Menuitem item = em.find(Menuitem.class, id);
+        em.remove(item);
+        em.flush();
+        utx.commit();
+
+    }
+    public void DBremoveLunch(int id) throws NotSupportedException, SystemException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
+        //Ta bort Lunch
+        utx.begin();
+        Lunch item = em.find(Lunch.class, id);
+        em.remove(item);
+        em.flush();
+        utx.commit();
+
+    }
+
+    public void DBaddLunch() throws NotSupportedException, SystemException, RollbackException, HeuristicMixedException, HeuristicRollbackException{
+        if(lunch_name == "" || description == "" || day == "" || Integer.parseInt(day) < 1 || Integer.parseInt(day) > 7) {
             return;
         }
-        em.createQuery("select max(m.id) from Menuitem m where m.id = :id")
-        .setParameter("id", THE_ID)
-        .getSingleResult();
-        THE_ID = THE_ID + 1;
-        //THE_ID = em.createNamedQuery("Menuitem.highestID", Menuitem.class).getResultList().get(0).getId() + 1;
-        Menuitem item = new Menuitem(THE_ID);
+        
+        //Lägger till LUNCH
+        utx.begin();
+        Lunch item = new Lunch();
+        item.setLunch_name(lunch_name);
+        item.setDescription(description);
+        item.setDay(Integer.parseInt(day));
+        em.persist(item);
+        em.flush();
+        em.refresh(item);
+        utx.commit();
+    }
+    public void DBadd() throws NotSupportedException, SystemException, RollbackException, HeuristicMixedException, HeuristicRollbackException{
+        if(foodname == "" || foodtype == "" || time == "" || price == "" || Integer.parseInt(foodtype) < 1 || Integer.parseInt(foodtype) > 2) {
+            return;
+        }
+        
+        //Lägger till Menuitem
+        utx.begin();
+        Menuitem item = new Menuitem();
         item.setFoodname(foodname);
         item.setFoodtype(Integer.parseInt(foodtype));
         item.setPrice(Integer.parseInt(price));
+        em.persist(item);
+        em.flush();
+        em.refresh(item);
+        int temp = item.getId();
+        utx.commit();
+
+        //Lägger till Cookingtime
+        utx.begin();
         Cookingtime itemTime = new Cookingtime();
-        itemTime.setId(THE_ID);
-        itemTime.setMenuitemid(THE_ID);
         itemTime.setTime(time);
-        persist(item);
-        persist(itemTime);
-//        setFoodname("");
-//        setFoodtype("");
-//        setTime("");
-//        setPrice("");
-//        setTHE_ID("");
+        itemTime.setMenuitemid(temp);
+        em.persist(itemTime);
+        em.flush();
+        em.refresh(itemTime);
+        utx.commit();
     }
 
     public void persist(Object object) {
@@ -128,16 +177,16 @@ public class DBreader implements Serializable {
     /**
      * @return the THE_ID
      */
-    public int getTHE_ID() {
-        return THE_ID;
-    }
+    //public int getTHE_ID() {
+    //    return THE_ID;
+    //}
 
     /**
      * @param THE_ID the THE_ID to set
      */
-    public void setTHE_ID(int THE_ID) {
-        this.THE_ID = THE_ID;
-    }
+    //public void setTHE_ID(int THE_ID) {
+    //   this.THE_ID = THE_ID;
+    //}
 
     /**
      * @return the price
@@ -179,5 +228,34 @@ public class DBreader implements Serializable {
      */
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public String getDay() {
+        return day;
+    }
+    public String getDay_modified() {
+        return day_modified;
+    }
+
+    /**
+     * @param foodtype the foodtype to set
+     */
+    public void setDay(String day) {
+        this.day = day;
+    }
+
+    public void setLunch_name(String lunch_name) {
+        this.lunch_name = lunch_name;
+    }
+    public String getLunch_name() {
+        return lunch_name;
+    }
+
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    public String getDescription() {
+        return description;
     }
 }
